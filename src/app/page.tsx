@@ -1,6 +1,15 @@
+"use client"
+import React, { useRef } from "react"
 import Dropdown from "./components/Dropdown";
 
 export default function Home() {
+
+  const option = useRef("jsontocsv");
+  
+  const dropdownSelectHandler = (event: any) => {
+    option.current = event.target.value;
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div>
@@ -11,7 +20,9 @@ export default function Home() {
             Easily convert CSV to JSON or CSV to JSON. Copy and paste the data or load in a local file. Save the results. 
           </p>
 
-          <Dropdown />
+          <Dropdown 
+            onSelectHandler={dropdownSelectHandler}
+          />
         </div>
     </main>
   )
