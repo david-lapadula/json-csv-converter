@@ -3,7 +3,7 @@ const csvToJson = (data) => {
 }
 
 const jsonToCsv = (data) => {
-    if (!isValidJson) return null; 
+    if (!isValidJson(data)) return null; 
 }
 
 const isValidJson = (str) => {

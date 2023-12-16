@@ -4,26 +4,26 @@ import Dropdown from "./components/Dropdown";
 import { csvToJson, jsonToCsv } from "./converters/converters"
 
 export default function Home() {
-
-  const [error, setError] = useState<String | null>();
-  const [input, setInput] = useState("");
+  
   const option = useRef("jsontocsv");
+  const [error, setError] = useState<String | null>();
+  const [inputData, setInputData] = useState("");
 
   const dropdownSelectHandler = (event: any) => {
     option.current = event.target.value;
   }
 
-  const convertHandler = () => {
+  const conversionHandler = () => {
     const { current } = option;
-    const isJsonToCsv = !!(current === "jsontocsv");
+    const isJsonToCsv = current === "jsontocsv";
 
-    if (!input){
-      setError("Please fill in the left field with input."); 
+    if (!inputData){
+      setError("Please ensure the left field is filled in."); 
       return; 
     }
     
     if (isJsonToCsv){
-      const csvData = jsonToCsv(input);
+      const csvData = jsonToCsv(inputData);
 
       if (!csvData) {
         setError("Please enter a valid json string"); 
@@ -37,11 +37,11 @@ export default function Home() {
 
   const handleInputChange = (event: any) => {
       clearData();
-      setInput(event.target.value);
+      setInputData(event.target.value);
   }
 
   const clearData = () => {
-    setInput("");
+    setInputData("");
     setError(null);
   }
 
@@ -72,7 +72,7 @@ export default function Home() {
           <div className="p-1.5">
             <textarea
               onChange={handleInputChange}
-              value={input}
+              value={inputData}
               className="block m-2 p-2.5 w-full h-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </textarea>
           </div>
@@ -87,7 +87,7 @@ export default function Home() {
         <div className="mt-8 grid content-center sm:px-16 xl:px-48">
           <button
             type="button"
-            onClick={convertHandler}
+            onClick={conversionHandler}
             className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
             Convert
           </button>
