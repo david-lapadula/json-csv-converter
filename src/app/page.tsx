@@ -6,6 +6,7 @@ import { csvToJson, jsonToCsv } from "./converters/converters"
 export default function Home() {
 
   const [error, setError] = useState<String | null>();
+  const [input, setInput] = useState("");
   const option = useRef("jsontocsv");
 
   const dropdownSelectHandler = (event: any) => {
@@ -16,10 +17,13 @@ export default function Home() {
     const { current } = option;
     const isJsonToCsv = !!(current === "jsontocsv");
 
-    // validate empty text
+    if (!input){
+      setError("Please fill in the left field with input."); 
+      return; 
+    }
     
     if (isJsonToCsv){
-      const csvData = jsonToCsv("hello");
+      const csvData = jsonToCsv(input);
 
       if (!csvData) {
         setError("Please enter a valid json string"); 
@@ -31,7 +35,13 @@ export default function Home() {
     // handle csv to json
   }
 
+  const handleInputChange = (event: any) => {
+      clearData();
+      setInput(event.target.value);
+  }
+
   const clearData = () => {
+    setInput("");
     setError(null);
   }
 
@@ -61,13 +71,13 @@ export default function Home() {
         <div className="grid grid-cols-2 sm:px-16 xl:px-48 h-full">
           <div className="p-1.5">
             <textarea
-              id="pre-convert"
+              onChange={handleInputChange}
+              value={input}
               className="block m-2 p-2.5 w-full h-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </textarea>
           </div>
           <div className="p-1.5">
             <textarea
-              id="post-convert"
               disabled
               className="block m-2 p-2.5 w-full h-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </textarea>
