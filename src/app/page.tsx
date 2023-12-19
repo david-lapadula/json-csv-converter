@@ -4,10 +4,13 @@ import Dropdown from "./components/Dropdown";
 import { csvToJson, jsonToCsv } from "./converters/converters"
 
 export default function Home() {
+
+  const UPLOAD_TEXT = "Click to upload, drag a file, or upload text below.";
   
   const option = useRef("jsontocsv");
   const [error, setError] = useState<String | null>();
   const [inputData, setInputData] = useState("");
+  const [uploadText, setUploadText] = useState(UPLOAD_TEXT);
 
   const dropdownSelectHandler = (event: any) => {
     option.current = event.target.value;
@@ -40,18 +43,37 @@ export default function Home() {
       setInputData(event.target.value);
   }
 
+  const handleFileUpload = (event: any) => {
+    const { files, value } = event.target;
+    const fileReader = new FileReader();
+
+    // handle file name 
+    if (value) {
+      let fileName = value.split('\\').pop().split('/').pop();
+      setUploadText(fileName);
+    }
+
+    // handle file upload
+    fileReader.readAsText(files[0], "UTF-8");
+    fileReader.onload = e => {
+      const content: any = e.target.result;
+      setInputData(content)
+    };
+  }
+
   const clearData = () => {
     setInputData("");
     setError(null);
+    setUploadText(UPLOAD_TEXT);
   }
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <div>
-        <h1 className="mb-6 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">
+        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">
           JSON CSV Converter
         </h1>
-        <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+        <p className="mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
           Easily convert CSV to JSON or CSV to JSON. Copy and paste the data or load in a local file. Save the results.
         </p>
 
@@ -62,11 +84,38 @@ export default function Home() {
         {
           error != null && 
           (
-            <div className="sm:px-16 xl:px-48 flex flex-col items-center">
+            <div className="sm:px-16 xl:px-48 flex flex-col items-center mb-2">
               <p className="text-red-600 text-lg">{error}</p>
             </div>
           )
         }
+
+        <div className="grid grid-cols-2 sm:px-16 xl:px-48">
+          <div className="pl-4">            
+            <div className="flex items-center justify-center w-full">
+                <label className="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 p-2">
+                    <div className="flex flex-col items-center justify-center">
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">{uploadText}</span>
+                        </p>
+                    </div>
+                    <input type="file" className="hidden"  onChange={handleFileUpload}/>
+                </label>
+            </div> 
+          </div>
+          <div className="text-center">
+          <button 
+            type="button" 
+            className="text-gray-900 w-2/5 mr-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+              Copy
+          </button>
+          <button 
+            type="button" 
+            className="text-gray-900 w-2/5 ml-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+              Download
+            </button>
+          </div>
+        </div>
 
         <div className="grid grid-cols-2 sm:px-16 xl:px-48 h-full">
           <div className="p-1.5">
