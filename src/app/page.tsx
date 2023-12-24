@@ -2,33 +2,29 @@
 import React, { useRef, useState } from "react"
 import Dropdown from "./components/Dropdown";
 import { csvToJson, jsonToCsv } from "./utils/converters"
-import { getFormattedDate } from "./utils/helpers"
+import { copyData, downloadData, getFormattedDate, isJsonToCsv } from "./utils/helpers"
 
 export default function Home() {
 
-  const UPLOAD_TEXT = "Click to upload, drag a file, or upload text below.";
+  const FILE_INPUT_TEXT = "Click to upload, drag a file, or upload text below.";
   
   const option = useRef("jsontocsv");
   const [error, setError] = useState<String | null>();
   const [inputData, setInputData] = useState("");
   const [outputData, setOutputData] = useState("");
-  const [uploadText, setUploadText] = useState(UPLOAD_TEXT);
+  const [fileInputText, setFileInputText] = useState(FILE_INPUT_TEXT);
 
-  const dropdownSelectHandler = (event: any) => {
-    setOutputData("Hello") // remove
+  const convertOptionHandler = (event: any) => {
     option.current = event.target.value;
   }
 
   const conversionHandler = () => {
-    const { current } = option;
-    const isJsonToCsv = current === "jsontocsv";
-
     if (!inputData){
       setError("Please ensure the left field is filled in."); 
       return; 
     }
     
-    if (isJsonToCsv){
+    if (isJsonToCsv(option)){
       const csvData = jsonToCsv(inputData);
 
       if (!csvData) {
@@ -50,10 +46,12 @@ export default function Home() {
     const { files, value } = event.target;
     const fileReader = new FileReader();
 
+    clearData();
+
     // handle file name 
     if (value) {
       let fileName = value.split('\\').pop().split('/').pop();
-      setUploadText(fileName);
+      setFileInputText(fileName);
     }
 
     // handle file upload
@@ -64,46 +62,38 @@ export default function Home() {
     };
   }
 
-  const downloadResult = () => {
+  const downloadOutputData = () => {
     if (!outputData) {
       setError("Nothing to download");
       return;
     }
 
-    const { current } = option;
-    const isJsonToCsv = current === "jsontocsv";
     let filename = `output_${getFormattedDate()}`; 
-
-    if (isJsonToCsv) {
+    if (isJsonToCsv(option)) {
       filename += ".csv";
     } else {
       filename += ".json";
     }
 
-
-    const aTag = document.createElement('a');
-    aTag.href = outputData;
-    aTag.download = filename;
-    aTag.click();
-
     setError(null);
+    downloadData(outputData, filename); 
   }
 
-  const copyResult = () => {
+  const copyOutputData = () => {
     if (!outputData) {
       setError("Nothing to copy");
       return;
     }
 
     setError(null);
-    navigator.clipboard.writeText(outputData); 
+    copyData(outputData); 
   }
 
   const clearData = () => {
     setInputData("");
     setOutputData("");
     setError(null);
-    setUploadText(UPLOAD_TEXT);
+    setFileInputText(FILE_INPUT_TEXT);
   }
 
   return (
@@ -117,7 +107,7 @@ export default function Home() {
         </p>
 
         <Dropdown
-          onSelectHandler={dropdownSelectHandler}
+          onSelectHandler={convertOptionHandler}
         />
 
         {
@@ -135,7 +125,7 @@ export default function Home() {
                 <label className="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 p-2">
                     <div className="flex flex-col items-center justify-center">
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">{uploadText}</span>
+                          <span className="font-semibold">{fileInputText}</span>
                         </p>
                     </div>
                     <input type="file" className="hidden"  onChange={handleFileUpload}/>
@@ -145,13 +135,13 @@ export default function Home() {
           <div className="text-center">
           <button 
             type="button"
-            onClick={copyResult}
+            onClick={copyOutputData}
             className="text-gray-900 w-2/5 mr-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               Copy
           </button>
           <button 
             type="button" 
-            onClick={downloadResult}
+            onClick={downloadOutputData}
             className="text-gray-900 w-2/5 ml-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               Download
             </button>

@@ -7,4 +7,20 @@ const getFormattedDate = () => {
     return `${date}-${month}-${year}`
 }
 
-export { getFormattedDate }; 
+const copyData = (data) => {
+    navigator.clipboard.writeText(data); 
+}
+
+const downloadData = (data, filename) => {
+    const aTag = document.createElement('a');
+    aTag.href = data;
+    aTag.download = filename;
+    aTag.click();
+}
+
+const isJsonToCsv = (ref) => {
+    const { current } = ref;
+    return current === "jsontocsv";
+}
+
+export { copyData, downloadData, getFormattedDate, isJsonToCsv }; 
