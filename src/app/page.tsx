@@ -1,7 +1,8 @@
 "use client"
 import React, { useRef, useState } from "react"
 import Dropdown from "./components/Dropdown";
-import { csvToJson, jsonToCsv } from "./converters/converters"
+import { csvToJson, jsonToCsv } from "./utils/converters"
+import { getFormattedDate } from "./utils/helpers"
 
 export default function Home() {
 
@@ -10,9 +11,11 @@ export default function Home() {
   const option = useRef("jsontocsv");
   const [error, setError] = useState<String | null>();
   const [inputData, setInputData] = useState("");
+  const [outputData, setOutputData] = useState("");
   const [uploadText, setUploadText] = useState(UPLOAD_TEXT);
 
   const dropdownSelectHandler = (event: any) => {
+    setOutputData("Hello") // remove
     option.current = event.target.value;
   }
 
@@ -61,8 +64,44 @@ export default function Home() {
     };
   }
 
+  const downloadResult = () => {
+    if (!outputData) {
+      setError("Nothing to download");
+      return;
+    }
+
+    const { current } = option;
+    const isJsonToCsv = current === "jsontocsv";
+    let filename = `output_${getFormattedDate()}`; 
+
+    if (isJsonToCsv) {
+      filename += ".csv";
+    } else {
+      filename += ".json";
+    }
+
+
+    const aTag = document.createElement('a');
+    aTag.href = outputData;
+    aTag.download = filename;
+    aTag.click();
+
+    setError(null);
+  }
+
+  const copyResult = () => {
+    if (!outputData) {
+      setError("Nothing to copy");
+      return;
+    }
+
+    setError(null);
+    navigator.clipboard.writeText(outputData); 
+  }
+
   const clearData = () => {
     setInputData("");
+    setOutputData("");
     setError(null);
     setUploadText(UPLOAD_TEXT);
   }
@@ -105,12 +144,14 @@ export default function Home() {
           </div>
           <div className="text-center">
           <button 
-            type="button" 
+            type="button"
+            onClick={copyResult}
             className="text-gray-900 w-2/5 mr-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               Copy
           </button>
           <button 
             type="button" 
+            onClick={downloadResult}
             className="text-gray-900 w-2/5 ml-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
               Download
             </button>
@@ -128,6 +169,7 @@ export default function Home() {
           <div className="p-1.5">
             <textarea
               disabled
+              value={outputData}
               className="block m-2 p-2.5 w-full h-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </textarea>
           </div>
