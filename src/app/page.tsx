@@ -31,7 +31,9 @@ export default function Home() {
         setError("Please enter a valid json string"); 
       }
 
-      // set to csv
+      setOutputData(csvData); 
+
+      return;
     }
 
     // handle csv to json
