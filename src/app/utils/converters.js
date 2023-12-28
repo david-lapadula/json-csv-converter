@@ -1,5 +1,6 @@
 const csvToJson = (data) => {
-
+  var csv = parseCsv(data);
+  if (!csv) return null;
 }
 
 const jsonToCsv = (data) => {

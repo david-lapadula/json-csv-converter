@@ -32,8 +32,8 @@ export default function Home() {
       }
 
       setOutputData(csvData); 
+    } else {
 
-      return;
     }
 
     // handle csv to json
@@ -71,10 +71,14 @@ export default function Home() {
     }
 
     let filename = `output_${getFormattedDate()}`; 
+    let fileType; 
+
     if (isJsonToCsv(option)) {
       filename += ".csv";
+      fileType = "text/csv"; 
     } else {
       filename += ".json";
+      fileType = "application/json"; 
     }
 
     setError(null);

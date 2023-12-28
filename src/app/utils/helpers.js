@@ -8,12 +8,13 @@ const getFormattedDate = () => {
 }
 
 const copyData = (data) => {
-    navigator.clipboard.writeText(data); 
+    navigator.clipboard.writeText(data);
 }
 
-const downloadData = (data, filename) => {
+const downloadData = (data, filename, filetype) => {
     const aTag = document.createElement('a');
-    aTag.href = data;
+    const file = new Blob([data], { type: filetype });
+    aTag.href = URL.createObjectURL(file);
     aTag.download = filename;
     aTag.click();
 }
