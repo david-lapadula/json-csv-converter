@@ -6,7 +6,7 @@ import { copyData, downloadData, getFormattedDate, isJsonToCsv } from './utils/h
 
 export default function Home() {
 
-  const FILE_INPUT_TEXT = 'Click to upload, drag a file, or upload text below.';
+  const FILE_INPUT_TEXT = 'Click to select a file, or input data below';
   const option = useRef('jsontocsv');
   const [error, setError] = useState<String | null>();
   const [inputData, setInputData] = useState('');
@@ -18,24 +18,24 @@ export default function Home() {
   }
 
   const conversionHandler = () => {
-    if (!inputData){
-      setError('Please ensure the left field is filled in.'); 
-      return; 
+    if (!inputData) {
+      setError('Please ensure the left field is filled in.');
+      return;
     }
-    
-    if (isJsonToCsv(option)){
+
+    if (isJsonToCsv(option)) {
       const csvData = jsonToCsv(inputData);
 
       if (!csvData) {
-        setError('Please enter a valid json string'); 
+        setError('Please enter a valid json string');
       }
 
-      setOutputData(csvData); 
+      setOutputData(csvData);
     } else {
       const jsonData = csvToJson(inputData);
 
       if (!jsonData) {
-        setError('Please enter valid csv'); 
+        setError('Please enter valid csv.');
       }
 
       setOutputData(jsonData);
@@ -43,8 +43,8 @@ export default function Home() {
   }
 
   const handleInputChange = (event: any) => {
-      clearData();
-      setInputData(event.target.value);
+    clearData();
+    setInputData(event.target.value);
   }
 
   const handleFileUpload = (event: any) => {
@@ -73,19 +73,19 @@ export default function Home() {
       return;
     }
 
-    let filename = `output_${getFormattedDate()}`; 
-    let fileType; 
+    let filename = `output_${getFormattedDate()}`;
+    let fileType;
 
     if (isJsonToCsv(option)) {
       filename += '.csv';
-      fileType = 'text/csv'; 
+      fileType = 'text/csv';
     } else {
       filename += '.json';
-      fileType = 'application/json'; 
+      fileType = 'application/json';
     }
 
     setError(null);
-    downloadData(outputData, filename, fileType); 
+    downloadData(outputData, filename, fileType);
   }
 
   const copyOutputData = () => {
@@ -95,7 +95,7 @@ export default function Home() {
     }
 
     setError(null);
-    copyData(outputData); 
+    copyData(outputData);
   }
 
   const clearData = () => {
@@ -120,7 +120,7 @@ export default function Home() {
         />
 
         {
-          error != null && 
+          error != null &&
           (
             <div className='sm:px-16 xl:px-48 flex flex-col items-center mb-2'>
               <p className='text-red-600 text-lg'>{error}</p>
@@ -129,31 +129,33 @@ export default function Home() {
         }
 
         <div className='grid grid-cols-2 sm:px-16 xl:px-48'>
-          <div className='pl-4'>            
+          <div className='pl-4'>
             <div className='flex items-center justify-center w-full'>
-                <label className='flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 p-2'>
-                    <div className='flex flex-col items-center justify-center'>
-                        <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
-                          <span className='font-semibold'>{fileInputText}</span>
-                        </p>
-                    </div>
-                    <input type='file' className='hidden'  onChange={handleFileUpload}/>
-                </label>
-            </div> 
+              <label className='flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 p-1.5'>
+                <div className='flex flex-col items-center justify-center'>
+                  <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
+                    <span className='font-semibold'>{fileInputText}</span>
+                  </p>
+                </div>
+                <input type='file' className='hidden' onChange={handleFileUpload} />
+              </label>
+            </div>
           </div>
-          <div className='text-center'>
-          <button 
-            type='button'
-            onClick={copyOutputData}
-            className='text-gray-900 w-2/5 mr-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
-              Copy
-          </button>
-          <button 
-            type='button' 
-            onClick={downloadOutputData}
-            className='text-gray-900 w-2/5 ml-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
-              Download
-            </button>
+          <div className='text-center pl-4'>
+            <div className="grid grid-cols-2">
+              <button
+                type='button'
+                onClick={copyOutputData}
+                className='text-gray-900 w-full mr-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
+                Copy
+              </button>
+              <button
+                type='button'
+                onClick={downloadOutputData}
+                className='text-gray-900 w-full ml-2 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
+                Download
+              </button>
+            </div>
           </div>
         </div>
 
@@ -181,9 +183,8 @@ export default function Home() {
             className='focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'>
             Convert
           </button>
-          
-          <button 
-            type='button' 
+          <button
+            type='button'
             onClick={clearData}
             className='text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>
             Clear
