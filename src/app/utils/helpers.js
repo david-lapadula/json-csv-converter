@@ -21,7 +21,7 @@ const downloadData = (data, filename, filetype) => {
 
 const isJsonToCsv = (ref) => {
     const { current } = ref;
-    return current === "jsontocsv";
+    return current === 'jsontocsv';
 }
 
 export { copyData, downloadData, getFormattedDate, isJsonToCsv }; 
