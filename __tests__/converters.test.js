@@ -1,13 +1,7 @@
 const { csvToJson, jsonToCsv } = require('../src/app/utils/converters');
-// const { Home } = require('../src/app/page');
-// const { Dropdown } = require('../src/app/components/Dropdown');
 
 const invalidJson = `{"name": "John Doe","age": 30"city": "New York"}`; 
 const validJson = `{"name": "Jane Doe","age": 25,"city": "Chicago"}`; 
-const validJsonAsCsv = `
-"name","age","city"
-"Jane Doe","25","Chicago"
-`
 const invalidCsv = `Name,Age,City`
 const validSingleRowCSV = `Name,Age,City
 John,30,New York`;
@@ -16,15 +10,6 @@ John,30,New York
 Jane,25,Denver`;
 const validOneRowCsvAsJson = "{\"Name\":\"John\",\"Age\":\"30\",\"City\":\"New York\"}";
 const validMultiRowCsvAsJson = "[{\"Name\":\"John\",\"Age\":\"30\",\"City\":\"New York\"},{\"Name\":\"Jane\",\"Age\":\"25\",\"City\":\"Denver\"}]";
-
-
-/*
-    Main application page render test
-*/
-// test('renders Dropdown', () => {
-//     render(<Home />);
-//     expect(Dropdown).toBeInTheDocument();
-//   });
 
 /*
     JSON to CSV tests
@@ -42,9 +27,11 @@ test('JSON to CSV: Invalid object', () => {
     expect(jsonToCsv(invalidJson)).toBe(null);
 });
 
-// test('JSON to CSV: Valid object', () => {
-//     expect(jsonToCsv(validJson)).toBe(validJsonAsCsv)
-// });
+test('JSON to CSV: Valid object', () => {
+    // Jest finicky with multi line testing. Ensure string contains both expected rows
+    expect(jsonToCsv(validJson)).toContain(`"name","age","city"`); 
+    expect(jsonToCsv(validJson)).toContain(`"Jane Doe","25","Chicago"`);
+});
 
 /*
     CSV to JSON tests
