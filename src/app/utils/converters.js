@@ -55,7 +55,6 @@ const parseJson = (data) => {
   }
 }
 
-
 const buildHeadersArray = (isArray, json) => {
   if (!isArray) return Object.keys(json); 
 
