@@ -5,10 +5,11 @@ import { csvToJson, jsonToCsv } from './utils/converters';
 import { copyData, downloadData, getFormattedDate, isJsonToCsv } from './utils/helpers';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRightToBracket, faCircleXmark, faCopy, faSave } from '@fortawesome/free-solid-svg-icons';
 
 export default function Home() {
-
-  const FILE_INPUT_TEXT = 'Click to select a file, drag and drop a file, or enter input text in the left field.';
+  const FILE_INPUT_TEXT = 'Click to select a file, drag and drop a file, or enter text.';
   const option = useRef('jsontocsv');
   const [inputData, setInputData] = useState('');
   const [outputData, setOutputData] = useState('');
@@ -16,6 +17,7 @@ export default function Home() {
 
   const convertOptionHandler = (event: any) => {
     option.current = event.target.value;
+    clearData();
   }
 
   const conversionHandler = () => {
@@ -84,8 +86,6 @@ export default function Home() {
       filename += '.json';
       fileType = 'application/json';
     }
-
-    showErrorToast(null);
     downloadData(outputData, filename, fileType);
   }
 
@@ -95,7 +95,6 @@ export default function Home() {
       return;
     }
 
-    showErrorToast(null);
     copyData(outputData);
     showSuccessToast("Copied!");
   }
@@ -103,7 +102,6 @@ export default function Home() {
   const clearData = () => {
     setInputData('');
     setOutputData('');
-    showErrorToast(null);
     setFileInputText(FILE_INPUT_TEXT);
   }
 
@@ -147,15 +145,13 @@ export default function Home() {
   };
 
   return (
-    <main className='flex flex-col items-center justify-between p-24'>
+    <main className='flex flex-col p-36'>
       <div>
         <h1 className='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center'>
           JSON CSV Converter
         </h1>
-        <p className='mb-4 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400'>
-          Easily convert CSV to JSON or CSV to JSON. Copy and paste the data or load in a local file. Save the results.
-        </p>
 
+        {/* Succcess and error messages appear in this container */}
         <ToastContainer />
 
         <Dropdown
@@ -209,6 +205,7 @@ export default function Home() {
               type='button'
               onClick={conversionHandler}
               className='m-2 focus:outline-none w-1/3 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800'>
+              <FontAwesomeIcon icon={faArrowRightToBracket}  className='mr-2'/>
               Convert
             </button>
             <button
@@ -216,6 +213,7 @@ export default function Home() {
               onClick={clearData}
               style={{ backgroundColor: 'white' }}
               className='m-2 text-black w-1/3 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700'>
+              <FontAwesomeIcon icon={faCircleXmark}  className='mr-2'/>
               Clear
             </button>
           </div>
@@ -224,12 +222,14 @@ export default function Home() {
               type='button'
               onClick={copyOutputData}
               className='m-2 text-gray-900 w-1/3 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
+              <FontAwesomeIcon icon={faCopy}  className='mr-2'/>
               Copy
             </button>
             <button
               type='button'
               onClick={downloadOutputData}
               className='m-2 text-gray-900 w-1/3 border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'>
+              <FontAwesomeIcon icon={faSave}  className='mr-2'/>
               Download
             </button>
           </div>
