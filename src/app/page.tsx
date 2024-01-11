@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
 
-  const FILE_INPUT_TEXT = 'Click to select a file, or input data below';
+  const FILE_INPUT_TEXT = 'Click to select a file, drag and drop a file, or enter input text in the left field.';
   const option = useRef('jsontocsv');
   const [inputData, setInputData] = useState('');
   const [outputData, setOutputData] = useState('');
@@ -119,17 +119,32 @@ export default function Home() {
     });
   }
 
-  // const handleDragOver = (event: any) => {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  // };
+  const handleDragOver = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
-  // const handleDrop = (event: any) => {
-  //   event.preventDefault();
-  //   event.stopPropagation();
-  //   console.log(event.dataTransfer.files)
-  //   console.log(event.dataTransfer.value)
-  // };
+  const handleDrop = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const files = Array.from(event.dataTransfer.files);
+
+    if (!files || !files.length || files.length === 0) {
+      showErrorToast('Error uploading file. Please try again.');
+      return;
+    }
+ 
+    const standardFileInputReturn = {
+      target : {
+        files: files,
+        value: files[0].name
+      }
+    }
+
+    handleFileUpload(standardFileInputReturn); 
+
+  };
 
   return (
     <main className='flex flex-col items-center justify-between p-24'>
@@ -149,18 +164,23 @@ export default function Home() {
 
         <div className='grid sm:px-16 xl:px-48'>
           <div className='pl-4'>
-            <div className='flex items-center justify-center w-full'>
+            <div className='flex items-center justify-center w-full'
+               onDragOver={handleDragOver}
+               onDrop={handleDrop}
+            >
               <label className='flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 p-1.5'>
                 <div className='flex flex-col items-center justify-center'>
                   <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
                     <span className='font-semibold'>{fileInputText}</span>
                   </p>
                 </div>
-                <input
-                  type='file'
-                  className='hidden'
-                  onChange={handleFileUpload}
-                />
+                  <input
+                    type='file'
+                    className='hidden'
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                    onChange={handleFileUpload}
+                  />
               </label>
             </div>
           </div>
@@ -218,37 +238,3 @@ export default function Home() {
     </main>
   )
 }
-
-
-{/* <div>
-<textarea
-  value={"Hello"}
-  onChange={(e) => {console.log(e)} }
-  placeholder="Type something..."
-/>
-
-<div
-  style={{
-    border: '2px dashed #cccccc',
-    borderRadius: '5px',
-    padding: '20px',
-    textAlign: 'center',
-    marginTop: '20px',
-  }}
-  onDragOver={handleDragOver}
-  onDrop={handleDrop}
->
-  <p>Drag and drop files here, or click to select files</p>
-  <input
-    type="file"
-    multiple
-    onChange={(e) => {console.log(e)} }
-    style={{ display: 'none' }}
-    id="fileInput"
-  />
-  <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
-    Select Files
-  </label>
-
-</div>
-</div> */}
