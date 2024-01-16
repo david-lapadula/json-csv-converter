@@ -133,15 +133,14 @@ export default function Home() {
       return;
     }
  
-    const standardFileInputReturn = {
+    const normalizedFileReturn = {
       target : {
         files: files,
         value: files[0].name
       }
     }
 
-    handleFileUpload(standardFileInputReturn); 
-
+    handleFileUpload(normalizedFileReturn); 
   };
 
   return (
