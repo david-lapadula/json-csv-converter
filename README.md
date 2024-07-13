@@ -9,12 +9,9 @@
 
 ## Description
 
-This is a web tool built with Next.js that converts data between JSON and CSV formats. Users have the choice to input raw text, or may upload a file via a standard uploader or by drag and drop. Once the conversion has been completed, the user may copy the results to their clipboard or save them to a file.
+This web tool, built with Next.js, seamlessly converts data between JSON and CSV formats. Users can input raw text or upload files using a standard uploader or drag-and-drop functionality. After conversion, users can easily copy the results to their clipboard or save them to a file.
 
 ## Technology
-
-As noted above, the main library used for this application is Next.js. By offering flexible tooling and snappy server side rendering it remains an excellent choice for projects of all sizes. A link to the documentation provided by the Next.js team is below, along with a few other libraries used to build this conversion tool. 
-
 * [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * [Next.js](https://nextjs.org/docs)
 * [Tailwind CSS](https://v2.tailwindcss.com/docs)
@@ -59,4 +56,4 @@ npm run dev
 
 ## Acknowledgements
 
-I would like to express my gratitude to "florinpop17" on Github for the excellent repository of sample application idea provided. You can find the list **[here](https://github.com/florinpop17/app-ideas)**. Be sure to check out this page if you are looking for inspiration on your next pet project.
+The inspiration for this application came from an excellent list of project ideas created by **[florinpop17](https://github.com/florinpop17/app-ideas)**. Be sure to check it out when deciding on your next personal project.
