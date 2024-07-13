@@ -56,4 +56,4 @@ npm run dev
 
 ## Acknowledgements
 
-The inspiration for this application came from an excellent list of project ideas created by **[florinpop17](https://github.com/florinpop17/app-ideas)**. Be sure to check it out when deciding on your next personal project.
+The inspiration for this application came from an excellent list of ideas created by **[florinpop17](https://github.com/florinpop17/app-ideas)**. Make sure to check the list out when deciding on your next personal project.
