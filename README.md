@@ -22,8 +22,8 @@ This web tool, built with Next.js, seamlessly converts data between JSON and CSV
 
 1. Clone and install the project locally.
 ```bash
-git clone https://github.com/DavidLapadula/JsonCsvConverter.git
-cd jsoncsvconverter
+git clone https://github.com/DavidLapadula/json-csv-converter.git
+cd json-csv-converter
 ```
 
 2. Install packages. 
